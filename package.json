@@ -1,0 +1,30 @@
+{
+  "name": "webprinter-mcp",
+  "version": "0.1.0",
+  "description": "MCP server for Zhimuyun/WebPrinter cloud printing APIs.",
+  "license": "UNLICENSED",
+  "type": "commonjs",
+  "bin": {
+    "webprinter-mcp": "./bin/webprinter-mcp.js"
+  },
+  "files": [
+    "bin",
+    "README.md",
+    "LICENSE",
+    "mcpworld.json"
+  ],
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "printer",
+    "webprinter",
+    "cloud-print"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node ./bin/webprinter-mcp.js",
+    "pack:dry-run": "npm pack --dry-run"
+  }
+}

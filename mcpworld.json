@@ -1,0 +1,18 @@
+{
+  "type": "stdio",
+  "config": {
+    "mcpServers": {
+      "webprinter": {
+        "type": "npx",
+        "command": "npx",
+        "args": [
+          "-y",
+          "webprinter-mcp"
+        ],
+        "env": {
+          "WEBPRINTER_ACCESS_TOKEN": "your-access-token"
+        }
+      }
+    }
+  }
+}

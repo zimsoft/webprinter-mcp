@@ -1,0 +1,5 @@
+include README.md
+include requirements.txt
+include mcpworld.json
+include .env.example
+recursive-include src *.py

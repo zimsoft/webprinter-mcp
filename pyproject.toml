@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "webprinter-mcp"
+version = "0.1.0"
+description = "MCP server for Zhimuyun/WebPrinter cloud printing APIs."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "LicenseRef-Proprietary"
+authors = [
+  { name = "WebPrinter MCP" }
+]
+maintainers = [
+  { name = "WebPrinter MCP" }
+]
+dependencies = [
+  "mcp>=1.9.0,<2.0.0",
+  "requests>=2.32.0,<3.0.0",
+]
+keywords = ["mcp", "model-context-protocol", "printer", "webprinter", "cloud-print"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Topic :: Office/Business",
+]
+
+[project.scripts]
+webprinter-mcp = "webprinter_mcp.__main__:main"
+
+[project.urls]
+Homepage = "https://www.mcpworld.com"
+Documentation = "https://www.mcpworld.com/zh/help"
+
+[project.optional-dependencies]
+dev = [
+  "build>=1.2.2",
+  "twine>=5.1.1",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]

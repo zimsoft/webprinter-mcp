@@ -1,0 +1,1 @@
+"""WebPrinter MCP server package."""
