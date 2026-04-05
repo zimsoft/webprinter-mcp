@@ -7,7 +7,7 @@
         "command": "npx",
         "args": [
           "-y",
-          "webprinter-mcp"
+          "webprinter_mcp"
         ],
         "env": {
           "WEBPRINTER_ACCESS_TOKEN": "your-access-token"

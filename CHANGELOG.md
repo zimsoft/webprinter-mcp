@@ -10,6 +10,6 @@ The format is based on Keep a Changelog and the project follows Semantic Version
 
 - Migrated the repository from a Coze skill package to a standard `stdio` MCP server.
 - Added Python package metadata for PyPI publishing.
-- Added npm launcher package for `npx webprinter-mcp`.
+- Added npm launcher package for `npx webprinter_mcp`.
 - Added MCPWorld example configuration.
 - Added GitHub Actions workflows for CI and release publishing.

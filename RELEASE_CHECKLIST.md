@@ -3,7 +3,7 @@
 ## Before first public release
 
 - Confirm the package names are available on PyPI and npm:
-  - `webprinter-mcp`
+  - `webprinter_mcp`
 - Replace any placeholder project metadata if you add an official repository homepage later.
 - Confirm the chosen license text is correct for your intended distribution model.
 - Verify the upstream WebPrinter API terms allow this package to be published publicly.

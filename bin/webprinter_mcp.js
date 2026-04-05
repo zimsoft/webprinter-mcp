@@ -12,10 +12,10 @@ function runCandidate(index) {
   if (index >= candidates.length) {
     process.stderr.write(
       [
-        "Unable to start webprinter-mcp.",
+        "Unable to start webprinter_mcp.",
         "A Python 3.10+ runtime is required.",
         "Install the Python package first:",
-        "  pip install webprinter-mcp",
+        "  pip install webprinter_mcp",
       ].join("\n") + "\n"
     );
     process.exit(1);
