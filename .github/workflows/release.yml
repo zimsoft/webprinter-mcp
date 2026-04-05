@@ -46,13 +46,7 @@ jobs:
         id: meta
         shell: bash
         run: |
-          VERSION="$(python - <<'PY'
-from pathlib import Path
-import tomllib
-data = tomllib.loads(Path('pyproject.toml').read_text(encoding='utf-8'))
-print(data['project']['version'])
-PY
-)"
+          VERSION="$(python -c 'from pathlib import Path; import tomllib; data = tomllib.loads(Path("pyproject.toml").read_text(encoding="utf-8")); print(data["project"]["version"])')"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Upload dist artifacts

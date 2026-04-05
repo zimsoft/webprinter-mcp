@@ -1,7 +1,7 @@
 {
   "name": "webprinter_mcp",
   "version": "0.1.0",
-  "description": "MCP server for Zhimuyun/WebPrinter cloud printing APIs.",
+  "description": "MCP server for ZIM/WebPrinter cloud printing APIs.",
   "license": "UNLICENSED",
   "type": "commonjs",
   "bin": {

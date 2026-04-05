@@ -23,7 +23,7 @@ def print_result(result: dict[str, Any]) -> None:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Zhimuyun / WebPrinter cloud print CLI",
+        description="ZIM / WebPrinter cloud print CLI",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
