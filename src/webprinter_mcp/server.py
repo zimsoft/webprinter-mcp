@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+from typing import Any
+
 from mcp.server.fastmcp import FastMCP
 
-from .client import CloudPrintClient, SUPPORTED_MEDIA_FORMATS
+from .client import CloudPrintClient, PAPER_SIZE_DIMENSIONS_MM, SUPPORTED_MEDIA_FORMATS
 
 
 app = FastMCP(
@@ -87,6 +89,13 @@ def update_printer_copies(task_id: str, copies: int) -> dict:
 
 
 @app.tool()
+def update_printer_paper(task_id: str, paper: str | dict[str, Any]) -> dict:
+    """Update paper size for an existing roaming task using a preset name or custom dimensions in millimeters."""
+    normalized_paper = _normalize_paper_config(paper)
+    return get_client().update_printer_paper(task_id=task_id, paper=normalized_paper)
+
+
+@app.tool()
 def direct_print_document(
     file_name: str,
     url: str,
@@ -105,3 +114,28 @@ def direct_print_document(
         device_name=device_name,
         control_sn=control_sn,
     )
+
+
+def _normalize_paper_config(paper: str | dict[str, Any]) -> dict[str, float]:
+    if isinstance(paper, str):
+        normalized = paper.strip().upper().replace(" ", "")
+        if normalized in PAPER_SIZE_DIMENSIONS_MM:
+            width, height = PAPER_SIZE_DIMENSIONS_MM[normalized]
+            return {"width": width, "height": height}
+        raise ValueError(f"Unsupported paper preset: {paper}")
+
+    if isinstance(paper, dict):
+        width = paper.get("width")
+        height = paper.get("height")
+        if width is None or height is None:
+            raise ValueError("paper must include width and height")
+        try:
+            normalized_width = float(width)
+            normalized_height = float(height)
+        except (TypeError, ValueError) as exc:
+            raise ValueError("paper width and height must be numbers") from exc
+        if normalized_width <= 0 or normalized_height <= 0:
+            raise ValueError("paper width and height must be greater than 0")
+        return {"width": normalized_width, "height": normalized_height}
+
+    raise ValueError("paper must be a preset name like 'A4' or an object with width and height")

@@ -201,6 +201,7 @@ python -m webprinter_mcp
 - `update_printer_side(task_id, side)`
 - `update_printer_color(task_id, color)`
 - `update_printer_copies(task_id, copies)`
+- `update_printer_paper(task_id, paper)`
 
 ### 参数说明
 
@@ -215,6 +216,10 @@ python -m webprinter_mcp
 - `copies`
   - 整数
   - 必须大于等于 `1`
+- `paper`
+  - 可以直接传纸张类型名称，比如 `A3`、`A4`、`A5`、`LETTER`
+  - 也可以传自定义对象：`{"width": 210, "height": 297}`
+  - 宽高单位为毫米
 
 ### 使用示例
 
@@ -223,6 +228,8 @@ python -m webprinter_mcp
 - “把任务 `123` 改成双面打印”
 - “把任务 `123` 改成黑白打印”
 - “把任务 `123` 改成打印 3 份”
+- “把任务 `123` 改成 A4 纸”
+- “把任务 `123` 改成宽 210 高 297 的纸张”
 
 如果你是在本地 CLI 里调试，可以这样用：
 
@@ -230,4 +237,6 @@ python -m webprinter_mcp
 python scripts/mcp_client.py update-printer-side --task-id 123 --side DUPLEX
 python scripts/mcp_client.py update-printer-color --task-id 123 --color MONOCHROME
 python scripts/mcp_client.py update-printer-copies --task-id 123 --copies 3
+python scripts/mcp_client.py update-printer-paper --task-id 123 --paper A4
+python scripts/mcp_client.py update-printer-paper --task-id 123 --width 210 --height 297
 ```

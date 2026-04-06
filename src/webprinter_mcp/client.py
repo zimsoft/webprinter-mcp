@@ -9,6 +9,20 @@ import requests
 
 DEFAULT_BASE_URL = "https://any.webprinter.cn"
 TOKEN_HELP_URL = "http://get-ai-token.webprinter.cn"
+PAPER_SIZE_DIMENSIONS_MM: dict[str, tuple[float, float]] = {
+    "A0": (841.0, 1189.0),
+    "A1": (594.0, 841.0),
+    "A2": (420.0, 594.0),
+    "A3": (297.0, 420.0),
+    "A4": (210.0, 297.0),
+    "A5": (148.0, 210.0),
+    "A6": (105.0, 148.0),
+    "B4": (250.0, 353.0),
+    "B5": (176.0, 250.0),
+    "LETTER": (215.9, 279.4),
+    "LEGAL": (215.9, 355.6),
+    "TABLOID": (279.4, 431.8),
+}
 SUPPORTED_MEDIA_FORMATS = (
     "HTML",
     "PNG",
@@ -255,6 +269,15 @@ class CloudPrintClient:
         if copies is not None:
             payload["copies"] = copies
         return self._post_json("/openapi/task/config/updatePrinterCopiesMCP", payload)
+
+    def update_printer_paper(self, task_id: str, paper: dict[str, float]) -> dict[str, Any]:
+        return self._post_json(
+            "/openapi/task/config/updatePrinterPaperMCP",
+            {
+                "taskId": task_id,
+                "paper": paper,
+            },
+        )
 
     def direct_print_document(
         self,

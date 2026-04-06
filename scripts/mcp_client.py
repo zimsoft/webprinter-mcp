@@ -56,6 +56,12 @@ def build_parser() -> argparse.ArgumentParser:
     copies_parser.add_argument("--task-id", required=True)
     copies_parser.add_argument("--copies", required=True, type=int)
 
+    paper_parser = subparsers.add_parser("update-printer-paper", help="Update paper size")
+    paper_parser.add_argument("--task-id", required=True)
+    paper_parser.add_argument("--paper", help="Paper preset, such as A3, A4, A5, LETTER")
+    paper_parser.add_argument("--width", type=float, help="Custom paper width in millimeters")
+    paper_parser.add_argument("--height", type=float, help="Custom paper height in millimeters")
+
     print_parser = subparsers.add_parser("print-document", help="Direct print")
     print_parser.add_argument("--file-name", required=True)
     print_parser.add_argument("--url", required=True)
@@ -113,6 +119,38 @@ def main() -> None:
 
     if args.command == "update-printer-copies":
         print_result(client.update_printer_copies(task_id=args.task_id, copies=args.copies))
+        return
+
+    if args.command == "update-printer-paper":
+        if args.paper:
+            preset = args.paper.strip().upper().replace(" ", "")
+            paper_sizes = {
+                "A0": (841.0, 1189.0),
+                "A1": (594.0, 841.0),
+                "A2": (420.0, 594.0),
+                "A3": (297.0, 420.0),
+                "A4": (210.0, 297.0),
+                "A5": (148.0, 210.0),
+                "A6": (105.0, 148.0),
+                "B4": (250.0, 353.0),
+                "B5": (176.0, 250.0),
+                "LETTER": (215.9, 279.4),
+                "LEGAL": (215.9, 355.6),
+                "TABLOID": (279.4, 431.8),
+            }
+            if preset not in paper_sizes:
+                parser.error(f"Unsupported paper preset: {args.paper}")
+            width, height = paper_sizes[preset]
+            print_result(client.update_printer_paper(task_id=args.task_id, paper={"width": width, "height": height}))
+            return
+        if args.width is None or args.height is None:
+            parser.error("update-printer-paper requires --paper or both --width and --height")
+        print_result(
+            client.update_printer_paper(
+                task_id=args.task_id,
+                paper={"width": args.width, "height": args.height},
+            )
+        )
         return
 
     if args.command == "print-document":
