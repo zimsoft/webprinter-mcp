@@ -1,4 +1,4 @@
-# WebPrinter MCP
+# 智睦云打印MCP
 
 `webprinter_mcp` 是一个用于云打印的 MCP Server。  
 如果你的 MCP 客户端支持 `stdio` 类型的 MCP，就可以通过它完成文件上传、查询打印机、提交打印任务和直接打印。
@@ -16,12 +16,14 @@
 - “把刚才那个任务改成双面”
 
 ## 使用前先准备
+你需要先安装智睦云打印服务器，并完成打印机的共享。请从智睦云打印获取安装包：
+- `https://any.webprinter.cn`
 
-你需要先拿到 WebPrinter 的访问令牌。
+然后，你需要拿到云打印访问令牌(token)。
 
 获取地址：
 
-- `http://get-ai-token.webprinter.cn`
+- `[https://any.webprinter.cn/get-ai-server-token](https://any.webprinter.cn/get-ai-server-token)`
 
 拿到 token 之后，设置环境变量：
 
@@ -147,10 +149,11 @@ python -m webprinter_mcp
 }
 ```
 
-### 然后决定是“加入队列”还是“直接打印”
+### 然后决定是“漫游打印”还是“直接打印”
 
 如果你只是想先进入打印队列，可以这样理解：
-
+- "把这个文件提交漫游打印"
+或
 - “把这个文件加入打印队列”
 
 如果你要立刻打到某台打印机，可以这样理解：
@@ -179,7 +182,7 @@ python -m webprinter_mcp
 
 请先去这里拿 token：
 
-- `http://get-ai-token.webprinter.cn`
+- `[https://get-ai-token.webprinter.cn](https://any.webprinter.cn/get-ai-server-token)`
 
 然后确认你已经设置了：
 
