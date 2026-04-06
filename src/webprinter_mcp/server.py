@@ -70,6 +70,23 @@ def update_printer_side(task_id: str, side: str | None = None) -> dict:
 
 
 @app.tool()
+def update_printer_color(task_id: str, color: str | None = None) -> dict:
+    """Update color mode for an existing roaming task."""
+    normalized = color.upper() if color else None
+    if normalized not in {None, "COLOR", "MONOCHROME"}:
+        raise ValueError(f"Unsupported color: {color}")
+    return get_client().update_printer_color(task_id=task_id, color=normalized)
+
+
+@app.tool()
+def update_printer_copies(task_id: str, copies: int) -> dict:
+    """Update copy count for an existing roaming task."""
+    if copies < 1:
+        raise ValueError("copies must be greater than or equal to 1")
+    return get_client().update_printer_copies(task_id=task_id, copies=copies)
+
+
+@app.tool()
 def direct_print_document(
     file_name: str,
     url: str,

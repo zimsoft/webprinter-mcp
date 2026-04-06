@@ -193,3 +193,41 @@ python -m webprinter_mcp
 ```bash
 python -m webprinter_mcp
 ```
+
+## 任务配置工具
+
+对于已经创建好的漫游打印任务，现在可以继续修改下面这些配置：
+
+- `update_printer_side(task_id, side)`
+- `update_printer_color(task_id, color)`
+- `update_printer_copies(task_id, copies)`
+
+### 参数说明
+
+- `task_id`
+  - 漫游打印任务 ID
+- `side`
+  - 可选值：`ONESIDE`、`DUPLEX`、`TUMBLE`
+  - 分别表示：单面、双面长边翻转、双面短边翻转
+- `color`
+  - 可选值：`COLOR`、`MONOCHROME`
+  - 分别表示：彩色、黑白
+- `copies`
+  - 整数
+  - 必须大于等于 `1`
+
+### 使用示例
+
+如果你是在 MCP 客户端里通过自然语言调用，可以这样说：
+
+- “把任务 `123` 改成双面打印”
+- “把任务 `123` 改成黑白打印”
+- “把任务 `123` 改成打印 3 份”
+
+如果你是在本地 CLI 里调试，可以这样用：
+
+```bash
+python scripts/mcp_client.py update-printer-side --task-id 123 --side DUPLEX
+python scripts/mcp_client.py update-printer-color --task-id 123 --color MONOCHROME
+python scripts/mcp_client.py update-printer-copies --task-id 123 --copies 3
+```

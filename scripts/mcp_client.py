@@ -48,6 +48,14 @@ def build_parser() -> argparse.ArgumentParser:
     side_parser.add_argument("--task-id", required=True)
     side_parser.add_argument("--side", choices=["ONESIDE", "DUPLEX", "TUMBLE"])
 
+    color_parser = subparsers.add_parser("update-printer-color", help="Update color mode")
+    color_parser.add_argument("--task-id", required=True)
+    color_parser.add_argument("--color", choices=["COLOR", "MONOCHROME"])
+
+    copies_parser = subparsers.add_parser("update-printer-copies", help="Update print copies")
+    copies_parser.add_argument("--task-id", required=True)
+    copies_parser.add_argument("--copies", required=True, type=int)
+
     print_parser = subparsers.add_parser("print-document", help="Direct print")
     print_parser.add_argument("--file-name", required=True)
     print_parser.add_argument("--url", required=True)
@@ -97,6 +105,14 @@ def main() -> None:
 
     if args.command == "update-printer-side":
         print_result(client.update_printer_side(task_id=args.task_id, side=args.side))
+        return
+
+    if args.command == "update-printer-color":
+        print_result(client.update_printer_color(task_id=args.task_id, color=args.color))
+        return
+
+    if args.command == "update-printer-copies":
+        print_result(client.update_printer_copies(task_id=args.task_id, copies=args.copies))
         return
 
     if args.command == "print-document":

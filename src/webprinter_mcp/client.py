@@ -244,6 +244,18 @@ class CloudPrintClient:
             payload["side"] = side
         return self._post_json("/openapi/task/config/updatePrinterSideMCP", payload)
 
+    def update_printer_color(self, task_id: str, color: str | None = None) -> dict[str, Any]:
+        payload: dict[str, Any] = {"taskId": task_id}
+        if color:
+            payload["color"] = color
+        return self._post_json("/openapi/task/config/updatePrinterColorMCP", payload)
+
+    def update_printer_copies(self, task_id: str, copies: int | None = None) -> dict[str, Any]:
+        payload: dict[str, Any] = {"taskId": task_id}
+        if copies is not None:
+            payload["copies"] = copies
+        return self._post_json("/openapi/task/config/updatePrinterCopiesMCP", payload)
+
     def direct_print_document(
         self,
         file_name: str,
