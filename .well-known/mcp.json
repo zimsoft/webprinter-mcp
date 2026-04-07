@@ -5,7 +5,7 @@
   "serverInfo": {
     "name": "webprinter",
     "title": "WebPrinter MCP",
-    "version": "0.1.2"
+    "version": "0.1.3"
   },
   "description": "MCP server for WebPrinter cloud printing. Supports installation checks, printer queries, file upload, roaming print task creation, task configuration updates, and direct printing.",
   "documentationUrl": "https://github.com/zimsoft/webprinter-mcp",
