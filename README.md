@@ -110,6 +110,40 @@ python -m webprinter_mcp
 
 注意：如果你用 `npx webprinter_mcp`，本机依然需要有可用的 Python 运行环境。
 
+## 工具列表
+
+当前 MCP Server 提供以下工具：
+
+- `check_install_progress`
+  - 检查当前账号和设备环境是否已经具备云打印能力
+- `query_printers`
+  - 查询当前账号可用的打印机列表
+- `query_printer_detail`
+  - 查询指定打印机或共享设备的详细能力信息
+- `upload_file`
+  - 上传本地文件，并返回可用于打印的公网地址
+- `create_roaming_task`
+  - 根据文件 URL 创建漫游打印任务
+- `update_printer_side`
+  - 修改漫游打印任务的单双面设置
+- `update_printer_color`
+  - 修改漫游打印任务的彩色/黑白设置
+- `update_printer_copies`
+  - 修改漫游打印任务的打印份数
+- `update_printer_paper`
+  - 修改漫游打印任务的纸张大小，支持 `A3`、`A4` 等预设纸型，也支持自定义宽高
+- `direct_print_document`
+  - 把文件直接发送到指定打印机进行打印
+
+你也可以把它理解成一套完整的打印流程能力：
+
+1. 先检查环境：`check_install_progress`
+2. 再查看打印机：`query_printers` / `query_printer_detail`
+3. 上传文件：`upload_file`
+4. 创建漫游打印：`create_roaming_task`
+5. 按需调整任务参数：`update_printer_side` / `update_printer_color` / `update_printer_copies` / `update_printer_paper`
+6. 或者直接打印：`direct_print_document`
+
 ## 第一次接入建议怎么试
 
 第一次使用时，建议这样一步一步来：

@@ -1,0 +1,369 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/mcp-server-card/v1.json",
+  "version": "1.0",
+  "protocolVersion": "2025-06-18",
+  "serverInfo": {
+    "name": "webprinter",
+    "title": "WebPrinter MCP",
+    "version": "0.1.2"
+  },
+  "description": "MCP server for WebPrinter cloud printing. Supports installation checks, printer queries, file upload, roaming print task creation, task configuration updates, and direct printing.",
+  "documentationUrl": "https://github.com/zimsoft/webprinter-mcp",
+  "transport": {
+    "type": "streamable-http",
+    "endpoint": "https://any.webprinter.cn/strato/restful/describe/mcp?tags=aiuniman"
+  },
+  "capabilities": {
+    "tools": {
+      "listChanged": false
+    }
+  },
+  "authentication": {
+    "required": true,
+    "schemes": [
+      {
+        "type": "bearer",
+        "name": "WEBPRINTER_ACCESS_TOKEN",
+        "description": "Pass the WebPrinter access token in the Authorization header as a Bearer token."
+      }
+    ],
+    "tokenAcquisitionUrl": "https://any.webprinter.cn/get-ai-server-token"
+  },
+  "instructions": "A valid WebPrinter access token is required before calling this MCP server. Get the token from https://any.webprinter.cn/get-ai-server-token and send it in the Authorization header as Bearer <token>. Use upload_file before create_roaming_task or direct_print_document when the source file is local. For roaming tasks, update_printer_side, update_printer_color, update_printer_copies, and update_printer_paper can modify an existing task by taskId.",
+  "tools": [
+    {
+      "name": "check_install_progress",
+      "title": "Check Install Progress",
+      "description": "Check whether the user's cloud print environment is fully configured.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "query_printers",
+      "title": "Query Printers",
+      "description": "List printers available to the current user.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "query_printer_detail",
+      "title": "Query Printer Detail",
+      "description": "Query printer capabilities for a specific printer or shared device.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "printer_name": {
+            "type": "string",
+            "description": "Printer name."
+          },
+          "share_sn": {
+            "type": "string",
+            "description": "Shared device serial number."
+          },
+          "device_type": {
+            "type": "string",
+            "enum": [
+              "printer",
+              "scanner",
+              "camera"
+            ],
+            "description": "Device type."
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "upload_file",
+      "title": "Upload File",
+      "description": "Upload a local file and return a public URL that the print service can read.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "file_path": {
+            "type": "string",
+            "description": "Absolute or resolvable local file path."
+          }
+        },
+        "required": [
+          "file_path"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "create_roaming_task",
+      "title": "Create Roaming Task",
+      "description": "Create a roaming print task from a public document URL.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "file_name": {
+            "type": "string",
+            "description": "Display name of the file."
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Publicly accessible file URL."
+          },
+          "media_format": {
+            "type": "string",
+            "enum": [
+              "HTML",
+              "PNG",
+              "JPG",
+              "PDF",
+              "BMP",
+              "WEBP",
+              "WORD",
+              "EXCEL",
+              "PPT",
+              "TEXT",
+              "WPS",
+              "ODF",
+              "ODT",
+              "ODS",
+              "ODP",
+              "ODG",
+              "XPS",
+              "PWG"
+            ],
+            "description": "Source media format."
+          }
+        },
+        "required": [
+          "file_name",
+          "url",
+          "media_format"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "update_printer_side",
+      "title": "Update Printer Side",
+      "description": "Update simplex or duplex settings for an existing roaming task.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "task_id": {
+            "type": "string",
+            "description": "Roaming task ID."
+          },
+          "side": {
+            "type": "string",
+            "enum": [
+              "ONESIDE",
+              "DUPLEX",
+              "TUMBLE"
+            ],
+            "description": "Print side mode."
+          }
+        },
+        "required": [
+          "task_id"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "update_printer_color",
+      "title": "Update Printer Color",
+      "description": "Update color mode for an existing roaming task.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "task_id": {
+            "type": "string",
+            "description": "Roaming task ID."
+          },
+          "color": {
+            "type": "string",
+            "enum": [
+              "COLOR",
+              "MONOCHROME"
+            ],
+            "description": "Print color mode."
+          }
+        },
+        "required": [
+          "task_id"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "update_printer_copies",
+      "title": "Update Printer Copies",
+      "description": "Update copy count for an existing roaming task.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "task_id": {
+            "type": "string",
+            "description": "Roaming task ID."
+          },
+          "copies": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Number of copies."
+          }
+        },
+        "required": [
+          "task_id",
+          "copies"
+        ],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "update_printer_paper",
+      "title": "Update Printer Paper",
+      "description": "Update paper size for an existing roaming task using a standard preset like A4 or custom width and height in millimeters.",
+      "inputSchema": {
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "task_id": {
+                "type": "string",
+                "description": "Roaming task ID."
+              },
+              "paper": {
+                "type": "string",
+                "enum": [
+                  "A0",
+                  "A1",
+                  "A2",
+                  "A3",
+                  "A4",
+                  "A5",
+                  "A6",
+                  "B4",
+                  "B5",
+                  "LETTER",
+                  "LEGAL",
+                  "TABLOID"
+                ],
+                "description": "Paper preset name."
+              }
+            },
+            "required": [
+              "task_id",
+              "paper"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "task_id": {
+                "type": "string",
+                "description": "Roaming task ID."
+              },
+              "paper": {
+                "type": "object",
+                "properties": {
+                  "width": {
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "description": "Paper width in millimeters."
+                  },
+                  "height": {
+                    "type": "number",
+                    "exclusiveMinimum": 0,
+                    "description": "Paper height in millimeters."
+                  }
+                },
+                "required": [
+                  "width",
+                  "height"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "task_id",
+              "paper"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    {
+      "name": "direct_print_document",
+      "title": "Direct Print Document",
+      "description": "Send a document directly to a specific printer.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "file_name": {
+            "type": "string",
+            "description": "Display name of the file."
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Publicly accessible file URL."
+          },
+          "media_format": {
+            "type": "string",
+            "enum": [
+              "HTML",
+              "PNG",
+              "JPG",
+              "PDF",
+              "BMP",
+              "WEBP",
+              "WORD",
+              "EXCEL",
+              "PPT",
+              "TEXT",
+              "WPS",
+              "ODF",
+              "ODT",
+              "ODS",
+              "ODP",
+              "ODG",
+              "XPS",
+              "PWG"
+            ],
+            "description": "Source media format."
+          },
+          "device_name": {
+            "type": "string",
+            "description": "Target printer device name."
+          },
+          "control_sn": {
+            "type": "string",
+            "description": "Target printer control serial number."
+          }
+        },
+        "required": [
+          "file_name",
+          "url",
+          "media_format",
+          "device_name",
+          "control_sn"
+        ],
+        "additionalProperties": false
+      }
+    }
+  ],
+  "_meta": {
+    "publisher": {
+      "name": "WebPrinter MCP"
+    },
+    "deployment": {
+      "baseUrl": "https://any.webprinter.cn"
+    }
+  }
+}
