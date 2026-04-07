@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog and the project follows Semantic Versioning.
 
+## [0.1.4] - 2026-04-07
+
+### Added
+
+- Expanded README tool documentation with usage guidance, behaviors, return expectations, and examples.
+- Added website well-known MCP metadata and improved remote discovery descriptions.
+- Added explicit MCP client configuration examples using `npx webprinter_mcp`.
+
 ## [0.1.2] - 2026-04-06
 
 ### Added

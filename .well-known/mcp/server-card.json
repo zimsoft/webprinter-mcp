@@ -7,7 +7,7 @@
     "title": "WebPrinter MCP",
     "version": "0.1.3"
   },
-  "description": "MCP server for WebPrinter cloud printing. Supports installation checks, printer queries, file upload, roaming print task creation, task configuration updates, and direct printing.",
+  "description": "MCP server for WebPrinter cloud printing. Supports environment checks, printer discovery, printer capability queries, local file upload, roaming print task creation, roaming task configuration updates, and direct printing to target devices.",
   "documentationUrl": "https://github.com/zimsoft/webprinter-mcp",
   "transport": {
     "type": "streamable-http",
@@ -29,12 +29,12 @@
     ],
     "tokenAcquisitionUrl": "https://any.webprinter.cn/get-ai-server-token"
   },
-  "instructions": "A valid WebPrinter access token is required before calling this MCP server. Get the token from https://any.webprinter.cn/get-ai-server-token and send it in the Authorization header as Bearer <token>. Use upload_file before create_roaming_task or direct_print_document when the source file is local. For roaming tasks, update_printer_side, update_printer_color, update_printer_copies, and update_printer_paper can modify an existing task by taskId.",
+  "instructions": "A valid WebPrinter access token is required before calling this MCP server. Get the token from https://any.webprinter.cn/get-ai-server-token and send it in the Authorization header as Bearer <token>. Recommended workflow: first call check_install_progress, then query_printers or query_printer_detail, upload local files with upload_file when needed, create roaming tasks with create_roaming_task, and finally adjust task settings with update_printer_side, update_printer_color, update_printer_copies, or update_printer_paper. Use direct_print_document only when the target printer and control_sn are already known.",
   "tools": [
     {
       "name": "check_install_progress",
       "title": "Check Install Progress",
-      "description": "Check whether the user's cloud print environment is fully configured.",
+      "description": "Check whether the current account, client, and device environment are ready for WebPrinter cloud printing. Recommended as the first tool to call during setup or troubleshooting.",
       "inputSchema": {
         "type": "object",
         "properties": {},
@@ -44,7 +44,7 @@
     {
       "name": "query_printers",
       "title": "Query Printers",
-      "description": "List printers available to the current user.",
+      "description": "List printers available to the current user, including printers that can be used for direct printing or roaming task workflows.",
       "inputSchema": {
         "type": "object",
         "properties": {},
@@ -54,7 +54,7 @@
     {
       "name": "query_printer_detail",
       "title": "Query Printer Detail",
-      "description": "Query printer capabilities for a specific printer or shared device.",
+      "description": "Query detailed capabilities and metadata for a specific printer or shared device. Use this when printer-level details are needed before printing.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -82,7 +82,7 @@
     {
       "name": "upload_file",
       "title": "Upload File",
-      "description": "Upload a local file and return a public URL that the print service can read.",
+      "description": "Upload a local file and return a public URL that the print service can read. Use this before create_roaming_task or direct_print_document when the source file is not already hosted online.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -100,7 +100,7 @@
     {
       "name": "create_roaming_task",
       "title": "Create Roaming Task",
-      "description": "Create a roaming print task from a public document URL.",
+      "description": "Create a roaming print task from a public document URL. Returns a task identifier that can later be used to update side, color, copies, or paper settings.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -149,7 +149,7 @@
     {
       "name": "update_printer_side",
       "title": "Update Printer Side",
-      "description": "Update simplex or duplex settings for an existing roaming task.",
+      "description": "Update simplex or duplex settings for an existing roaming print task. Suitable when the user asks for single-sided, duplex long-edge, or duplex short-edge printing.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -176,7 +176,7 @@
     {
       "name": "update_printer_color",
       "title": "Update Printer Color",
-      "description": "Update color mode for an existing roaming task.",
+      "description": "Update color mode for an existing roaming print task. Suitable when the user asks for color or monochrome printing.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -202,7 +202,7 @@
     {
       "name": "update_printer_copies",
       "title": "Update Printer Copies",
-      "description": "Update copy count for an existing roaming task.",
+      "description": "Update copy count for an existing roaming print task. Use when the user requests a specific number of printed copies.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -226,7 +226,7 @@
     {
       "name": "update_printer_paper",
       "title": "Update Printer Paper",
-      "description": "Update paper size for an existing roaming task using a standard preset like A4 or custom width and height in millimeters.",
+      "description": "Update paper size for an existing roaming print task using a standard preset like A3, A4, A5, LETTER, or custom width and height in millimeters.",
       "inputSchema": {
         "oneOf": [
           {
@@ -301,7 +301,7 @@
     {
       "name": "direct_print_document",
       "title": "Direct Print Document",
-      "description": "Send a document directly to a specific printer.",
+      "description": "Send a document directly to a specific printer when the target device name and control serial number are already known. If the printer is hidden and only supports roaming tasks, direct printing should not be used.",
       "inputSchema": {
         "type": "object",
         "properties": {
@@ -364,6 +364,26 @@
     },
     "deployment": {
       "baseUrl": "https://any.webprinter.cn"
+    },
+    "usage": {
+      "recommendedOrder": [
+        "check_install_progress",
+        "query_printers",
+        "query_printer_detail",
+        "upload_file",
+        "create_roaming_task",
+        "update_printer_side",
+        "update_printer_color",
+        "update_printer_copies",
+        "update_printer_paper",
+        "direct_print_document"
+      ],
+      "notes": [
+        "Use upload_file before printing when the source document is local.",
+        "Roaming task updates require an existing task_id returned by create_roaming_task.",
+        "Paper presets such as A3 and A4 are automatically converted to millimeter width and height values.",
+        "A valid Bearer token is required for every request."
+      ]
     }
   }
 }
